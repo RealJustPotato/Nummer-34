@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NUMMER 34 | ARCHIVE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --safelight: #cc0000;
+            --concrete: #1a1a1a;
+            --bg-color: #050505;
+            --offwhite: #eaeaea;
+        }
+
+        body {
+            font-family: 'Space Mono', 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--offwhite);
+            margin: 0;
+            text-transform: uppercase;
+            overflow-x: hidden;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 4px;
+        }
+
+        /* Nieuwe Masonry Layout */
+        .brutalist-grid {
+            column-count: 1;
+            column-gap: 1rem;
+            padding: 1rem;
+            max-width: 1600px;
+            margin-inline: auto;
+        }
+
+        @media (min-width: 768px) {
+            .brutalist-grid {
+                column-count: 3;
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .metadata-overlay { 
+                display: block; 
+                background-color: rgba(204, 0, 0, 0.9); 
+            }
+        }
+
+        .photo-container {
+            position: relative;
+            border: 2px solid var(--concrete);
+            background: #111;
+            cursor: crosshair;
+            /* Masonry specifieke regels: */
+            break-inside: avoid;
+            margin-bottom: 1rem;
+            display: block;
+            width: 100%;
+        }
+
+        .photo-img {
+            width: 100%;
+            height: auto; /* Zorgt dat de originele aspect ratio behouden blijft */
+            display: block; /* Voorkomt witte ruimte onder de afbeelding */
+        }
+
+        .photo-container:hover {
+            border-color: var(--safelight);
+        }
+
+        .metadata-overlay {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: var(--safelight);
+            color: #000;
+            padding: 0.5rem;
+            font-weight: bold;
+            font-size: 0.85rem;
+            border-top: 2px solid #000;
+            border-right: 2px solid #000;
+            z-index: 10;
+        }
+
+        .photo-container:hover .metadata-overlay { display: block; }
+
+        .target-reticle {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--safelight);
+            font-size: 2rem;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .photo-container:hover .target-reticle { display: block; }
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); border-left: 2px solid var(--concrete); }
+        ::-webkit-scrollbar-thumb { background: var(--concrete); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--safelight); }
+        
+        .blink { animation: blinker 1s step-start infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+        
+        .archive-item {
+            border-bottom: 2px solid var(--concrete);
+            cursor: pointer;
+        }
+        .archive-item:hover {
+            background-color: var(--safelight);
+            color: var(--bg-color);
+            border-color: var(--safelight);
+        }
+
+        /* Nav active state */
+        .nav-link.active {
+            color: var(--safelight);
+            border-color: var(--concrete);
+        }
+
+        .fluid-logo { font-size: clamp(1.75rem, 6vw + 0.5rem, 3.75rem); }
+        .fluid-subtitle { font-size: clamp(0.6rem, 2.5vw + 0.1rem, 0.875rem); }
+        .fluid-header { font-size: clamp(1.25rem, 5vw + 0.5rem, 2.25rem); }
+        .fluid-album-title { font-size: clamp(1.75rem, 8vw + 0.5rem, 6rem); }
+        .fluid-archive-item { font-size: clamp(1.1rem, 4vw + 0.5rem, 2.25rem); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header / Navigation -->
+    <header class="border-b-4 border-[#1a1a1a] py-3 px-4 md:py-4 md:px-8 flex flex-col md:flex-row md:justify-between items-start md:items-center sticky top-0 bg-[#050505]/95 backdrop-blur-sm z-50">
+        <div class="flex justify-between items-center w-full md:w-auto mb-1 md:mb-0">
+            <div>
+                <h1 class="fluid-logo font-bold tracking-tighter leading-none text-[#eaeaea] hover:text-[#cc0000] cursor-crosshair" onclick="navigate('home')">
+                    NUMMER_34<span class="blink text-[#cc0000]">_</span>
+                </h1>
+                <p class="fluid-subtitle mt-1 text-gray-500">RAW. URBAN. UNFILTERED. // EST. 2026</p>
+            </div>
+            
+            <button onclick="toggleMobileMenu()" class="md:hidden text-2xl text-[#cc0000] hover:bg-[#cc0000] hover:text-[#050505] focus:outline-none border-2 border-[#1a1a1a] px-3 py-1 bg-[#111] transition-none flex items-center justify-center">
+                ☰
+            </button>
+        </div>
+        
+        <nav id="main-nav" class="hidden md:flex flex-col md:flex-row gap-2 md:gap-8 text-lg font-bold w-full md:w-auto mt-3 md:mt-0 border-t-2 md:border-t-0 border-[#1a1a1a] pt-3 md:pt-0">
+            <button onclick="navigate('home')" id="nav-home" class="nav-link active hover:text-[#050505] hover:bg-[#cc0000] px-3 py-2 md:px-2 md:py-1 border border-transparent text-left md:text-center w-full md:w-auto">[ INDEX ]</button>
+            <button onclick="navigate('archive')" id="nav-archive" class="nav-link hover:text-[#050505] hover:bg-[#cc0000] px-3 py-2 md:px-2 md:py-1 border border-transparent text-left md:text-center w-full md:w-auto">[ ARCHIVE ]</button>
+            <button onclick="navigate('about')" id="nav-about" class="nav-link hover:text-[#050505] hover:bg-[#cc0000] px-3 py-2 md:px-2 md:py-1 border border-transparent text-left md:text-center w-full md:w-auto">[ ABOUT ]</button>
+        </nav>
+    </header>
+
+    <!-- Info Ticker -->
+    <div class="bg-[#1a1a1a] text-[#cc0000] text-xs py-2 px-4 overflow-hidden border-b border-[#333] whitespace-nowrap">
+        <marquee scrollamount="8" class="font-bold tracking-widest">
+            WARNING: HIGH CONTRAST /// NO FILTERS /// DARKROOM PRINTS UNAVAILABLE /// ANALOG + DIGITAL ARCHIVE ///
+        </marquee>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        
+        <!-- HOME (INDEX) -->
+        <div id="view-home">
+            <div id="home-grid" class="brutalist-grid">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- ARCHIVE (LIST) -->
+        <div id="view-archive" class="hidden max-w-6xl mx-auto p-4 md:p-8">
+            <h2 class="fluid-header font-bold text-[#cc0000] mb-8 border-b-2 border-[#cc0000] pb-2 inline-block">/// DIRECTORY_LISTING</h2>
+            <ul id="album-list" class="flex flex-col text-lg md:text-2xl font-bold tracking-wider">
+                <!-- Injected via JS -->
+            </ul>
+        </div>
+
+        <!-- ALBUM (GRID) -->
+        <div id="view-album" class="hidden">
+            <div class="p-4 md:p-8 max-w-7xl mx-auto border-b-2 border-[#1a1a1a]">
+                <button onclick="navigate('archive')" class="mb-8 hover:text-[#050505] hover:bg-[#cc0000] px-4 py-3 md:px-3 md:py-2 border border-[#cc0000] text-[#cc0000] font-bold text-sm md:text-base transition-none w-full md:w-auto text-left md:text-center">
+                    [ < BACK TO ARCHIVE ]
+                </button>
+                <h2 id="album-title" class="fluid-album-title font-bold tracking-tighter mb-4 text-[#eaeaea]"></h2>
+                <p id="album-desc" class="text-gray-400 max-w-2xl text-sm md:text-base border-l-4 border-[#cc0000] pl-4 py-1 bg-[#111] bg-opacity-50 uppercase"></p>
+            </div>
+            
+            <div id="album-grid" class="brutalist-grid pt-0">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- ABOUT -->
+        <div id="view-about" class="hidden max-w-6xl mx-auto p-4 md:p-8 md:mt-8">
+            <h2 class="fluid-header font-bold text-[#cc0000] mb-8 md:mb-12 border-b-4 border-[#cc0000] pb-2 uppercase tracking-tighter inline-block">/// CLASSIFIED_INFO</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-base md:text-lg leading-relaxed text-[#eaeaea]">
+                <section class="border-l-4 border-[#1a1a1a] pl-4 md:pl-6 hover:border-[#cc0000] transition-none">
+                    <p class="font-bold tracking-wide uppercase">NUMMER 34 IS MY PERSONAL ARCHIVE FOR MY PERSONAL INTERESTS AND DOCUMENTATION. I CAPTURE THE UNPOLISHED REALITY OF LIFE THROUGH ALTERNATIVE ANALOG AND DIGITAL MEDIUMS, PRIMARILY 35MM B&W FILM. NO FILTERS, NO BULLSHIT. JUST THE CAMERA, THE SUBJECT, AND THE MOMENT.</p>
+                </section>
+
+                <section class="border-l-4 border-[#1a1a1a] pl-4 md:pl-6 hover:border-[#cc0000] transition-none">
+                    <h3 class="text-[#cc0000] font-bold mb-4 text-xl md:text-2xl">/// CONTACT & TRANSMISSIONS</h3>
+                    <ul class="space-y-6 font-bold tracking-wider flex flex-col">
+                        <li><span class="text-gray-500 block mb-1">INQUIRIES:</span> <a href="mailto:lans@nummer34.com" class="text-[#eaeaea] hover:text-[#050505] hover:bg-[#cc0000] px-4 py-3 md:px-3 md:py-2 border border-[#1a1a1a] transition-none uppercase block md:inline-block">lans@nummer34.com</a></li>
+                        <li><span class="text-gray-500 block mb-1">NUMMER 34 INSTAGRAM:</span> <a href="https://www.instagram.com/nummer_34_/" target="_blank" rel="noopener noreferrer" class="text-[#eaeaea] hover:text-[#050505] hover:bg-[#cc0000] px-4 py-3 md:px-3 md:py-2 border border-[#1a1a1a] transition-none uppercase block md:inline-block">@nummer_34_</a></li>
+                        <li><span class="text-gray-500 block mb-1">PERSONAL INSTAGRAM:</span> <a href="https://www.instagram.com/lans_vanglabbeek/" target="_blank" rel="noopener noreferrer" class="text-[#eaeaea] hover:text-[#050505] hover:bg-[#cc0000] px-4 py-3 md:px-3 md:py-2 border border-[#1a1a1a] transition-none uppercase block md:inline-block">@lans_vanglabbeek</a></li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t-4 border-[#1a1a1a] mt-8 p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8 bg-[#0a0a0a]">
+        <div>
+            <h3 class="text-[#cc0000] font-bold mb-4">/// DIRECTORY</h3>
+            <ul class="text-sm space-y-2 text-gray-400">
+                <li class="hover:text-white cursor-pointer" onclick="navigate('archive')">> ARCHIVE_INDEX</li>
+                <li class="hover:text-white cursor-pointer">> DARKROOM_NOTES</li>
+                <li class="hover:text-white cursor-pointer">> I AM HUNGRY</li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="text-[#cc0000] font-bold mb-4">/// SYSTEM LOG</h3>
+            <ul class="text-xs space-y-1 font-mono text-gray-500">
+                <li>STATUS: ONLINE</li>
+                <li>HOST: WWW.NUMMER34.COM</li>
+                <li>ENCRYPTION: NONE</li>
+                <li>LAST UPDATE: <span id="current-date"></span></li>
+            </ul>
+        </div>
+        <div class="md:text-right">
+            <h3 class="text-[#cc0000] font-bold mb-4">/// CONTACT</h3>
+            <p class="text-sm text-gray-400 mb-2">SIGNAL INTERCEPT: LANS@NUMMER34.COM</p>
+            <p class="text-xs text-gray-600 mt-8">©2026 | WWW.NUMMER34.COM | DO NOT REPRODUCE.</p>
+        </div>
+    </footer>
+
+    <!-- FULLSCREEN OVERLAY -->
+    <div id="lightbox-overlay" class="hidden fixed inset-0 bg-[#050505]/95 z-[100] items-center justify-center p-4 md:p-8 backdrop-blur-sm">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 md:top-8 md:right-8 text-[#cc0000] hover:text-[#050505] hover:bg-[#cc0000] border-2 border-[#cc0000] bg-[#050505] px-4 py-2 font-bold text-xl md:text-2xl transition-none z-[110]">
+            [ X ]
+        </button>
+        <img id="lightbox-img" src="" alt="ENLARGED FRAME" class="max-w-full max-h-full object-contain border-4 border-[#1a1a1a]">
+    </div>
+
+    <script>
+        // Set dynamic date
+        document.getElementById('current-date').textContent = new Date().toISOString().split('T')[0];
+
+        // ==========================================
+        // HOME PAGE IMAGES
+        // ==========================================
+        const SITE_DATA = {
+            homeImages: [
+                { src: "Images/HOME/1.jpg", meta: "SEQ: 001 // BRUTALISM" },
+                { src: "Images/HOME/2.jpg", meta: "SEQ: 002 // LIVE" },
+                { src: "Images/HOME/3.jpg", meta: "SEQ: 003 // Home 2" },
+                { src: "Images/HOME/4.jpg", meta: "SEQ: 004 // indonesian chef" },
+                { src: "Images/HOME/5.jpg", meta: "SEQ: 005 // ministry view" },
+                { src: "Images/HOME/6.jpg", meta: "SEQ: 006 // PURE GOLD" },
+                { src: "Images/HOME/7.jpg", meta: "SEQ: 007 // EXPIRED" },
+                { src: "Images/HOME/8.jpg", meta: "SEQ: 008 // Who Left Me?" },
+                { src: "Images/HOME/9.jpg", meta: "SEQ: 009 // ROTTERDAM" }
+            ],
+            
+// Archive Albums
+// ==========================================
+
+            albums: [
+                { id: "ghent", folderName: "001Ghent", title: "VOL.001: GHENT", description: "Street life in Ghent, captured on Sony a6400 - 50mm FE 1.8", imageCount: 26 },
+                { id: "thehague", folderName: "002TheHague", title: "VOL.002: THE HAGUE", description: "Street life in The Hague, captured on Nikon D700 / Canon AE-1 - Ilford FP4", imageCount: 44 },
+              //    { id: "brussels", folderName: "003Brussels", title: "VOL.003: BRUSSELS", description: "URBAN TRANSIT. SUMMER 2026.", imageCount: 15 }
+            ]
+        };
+// ==========================================
+
+        function getFallbackImage(text, width=800, height=600) {
+            return `https://placehold.co/${width}x${height}/111/cc0000?text=${encodeURIComponent(text)}`;
+        }
+
+        function initSite() {
+            renderHome();
+            renderArchive();
+        }
+
+        function renderHome() {
+            const grid = document.getElementById('home-grid');
+            grid.innerHTML = ''; 
+            
+            SITE_DATA.homeImages.forEach((img, index) => {
+                const container = document.createElement('div');
+                container.className = `photo-container`;
+                container.setAttribute('onclick', 'openLightbox(this.querySelector("img").src)');
+                
+                const fallbackSrc = getFallbackImage(`MISSING: ${img.src}`);
+
+                container.innerHTML = `
+                    <img src="${img.src}" alt="${img.meta}" class="photo-img" onerror="this.onerror=null; this.src='${fallbackSrc}';">
+                    <div class="target-reticle">+</div>
+                    <div class="metadata-overlay">${img.meta}</div>
+                `;
+                grid.appendChild(container);
+            });
+        }
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('main-nav');
+            nav.classList.toggle('hidden');
+            nav.classList.toggle('flex');
+        }
+
+        function navigate(viewId, albumId = null) {
+
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-archive').classList.add('hidden');
+            document.getElementById('view-album').classList.add('hidden');
+            document.getElementById('view-about').classList.add('hidden');
+            
+
+            document.getElementById('nav-home').classList.remove('active', 'text-[#cc0000]', 'border-[#1a1a1a]');
+            document.getElementById('nav-archive').classList.remove('active', 'text-[#cc0000]', 'border-[#1a1a1a]');
+            document.getElementById('nav-about').classList.remove('active', 'text-[#cc0000]', 'border-[#1a1a1a]');
+
+
+            if (viewId === 'home') {
+                document.getElementById('view-home').classList.remove('hidden');
+                document.getElementById('nav-home').classList.add('active', 'text-[#cc0000]', 'border-[#1a1a1a]');
+            } else if (viewId === 'archive') {
+                document.getElementById('view-archive').classList.remove('hidden');
+                document.getElementById('nav-archive').classList.add('active', 'text-[#cc0000]', 'border-[#1a1a1a]');
+            } else if (viewId === 'about') {
+                document.getElementById('view-about').classList.remove('hidden');
+                document.getElementById('nav-about').classList.add('active', 'text-[#cc0000]', 'border-[#1a1a1a]');
+            } else if (viewId === 'album' && albumId) {
+                document.getElementById('view-album').classList.remove('hidden');
+                document.getElementById('nav-archive').classList.add('active', 'text-[#cc0000]', 'border-[#1a1a1a]'); 
+                renderAlbum(albumId);
+            }
+            
+
+            if (window.innerWidth < 768) {
+                document.getElementById('main-nav').classList.add('hidden');
+                document.getElementById('main-nav').classList.remove('flex');
+            }
+            
+            window.scrollTo(0,0);
+        }
+
+        function renderArchive() {
+            const list = document.getElementById('album-list');
+            list.innerHTML = ''; 
+            
+            const sortedAlbums = [...SITE_DATA.albums].sort((a, b) => b.folderName.localeCompare(a.folderName));
+            
+            sortedAlbums.forEach((album) => {
+                const li = document.createElement('li');
+                li.className = 'archive-item py-6 px-4 flex flex-col md:flex-row md:items-end justify-between transition-none';
+                li.onclick = () => navigate('album', album.id);
+                
+                li.innerHTML = `
+                    <div class="flex items-baseline gap-4 w-full md:w-auto overflow-hidden">
+                        <span class="fluid-archive-item truncate md:whitespace-normal">${album.title}</span>
+                    </div>
+                    <span class="text-sm text-gray-500 mt-2 md:mt-0 font-normal max-w-lg md:text-right shrink-0">[ ${album.imageCount} FILES ]</span>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        // Render Individual Album Dynamic Grid
+        function renderAlbum(albumId) {
+            const album = SITE_DATA.albums.find(a => a.id === albumId);
+            if (!album) return;
+
+            document.getElementById('album-title').textContent = album.title;
+            document.getElementById('album-desc').textContent = album.description;
+            
+            const grid = document.getElementById('album-grid');
+            grid.innerHTML = ''; 
+            
+            for (let i = 1; i <= album.imageCount; i++) {
+                const container = document.createElement('div');
+                
+                container.className = `photo-container`;
+                container.setAttribute('onclick', 'openLightbox(this.querySelector("img").src)');
+                
+                const imgSrc = `Images/${album.folderName}/${i}.jpg`;
+                const fallbackSrc = getFallbackImage(`MISSING: ${imgSrc}`);
+
+                container.innerHTML = `
+                    <img src="${imgSrc}" alt="FRAME ${i}" class="photo-img" onerror="this.onerror=null; this.src='${fallbackSrc}';">
+                    <div class="target-reticle">+</div>
+                    <div class="metadata-overlay">FRAME: ${String(i).padStart(3, '0')} // ${album.folderName}</div>
+                `;
+                grid.appendChild(container);
+            }
+        }
+
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox-overlay');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = src;
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox-overlay');
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.getElementById('lightbox-img').src = '';
+        }
+
+        initSite();
+    </script>
+</body>
+</html>
