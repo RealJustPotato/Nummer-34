@@ -1,2 +1,2 @@
 # Nummer-34
-NUMMER 34 IS MY PERSONAL ARCHIVE FOR MY PERSONAL INTERESTS AND DOCUMENTATION. I CAPTURE THE UNPOLISHED REALITY OF LIFE THROUGH ALTERNATIVE ANALOG AND DIGITAL MEDIUMS, PRIMARILY 35MM B&amp;W FILM. NO FILTERS, NO BULLSHIT. JUST THE CAMERA, THE SUBJECT, AND THE MOMENT.
+NUMMER 34 is my personal archive for my personal interests and documentation. I capture the unpolished reality of life through alternative analog and digital media, primarily 35mm B&amp;W film. NO filters, NO bullshit. Just the camera, The subject, and The moment.
